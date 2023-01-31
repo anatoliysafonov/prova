@@ -7,7 +7,7 @@ class Suggetion:
 
 
 class Command:
-    set_suggetion = True
+    suggetion = True
 
     def __init__(self):
         self.suggetion = True
@@ -34,18 +34,28 @@ class Add(Command):
         name, phone, birthday = args
         if not name:
             return self.__doc__
-        if Command.set_suggetion and self.suggetion:
+        if Command.suggetion and self.suggetion:
             if not phone:
                 suggetion.message.append('Tip: To add phone number use: add [name] [phone] ')
                 self.suggetion = False
             if not birthday:
                 suggetion.message.append('Tip: To set birthday use: set birthday [name] [date]')
-                self.ssuggetion = False
+                self.suggetion = False
         return 'THIS IS A ADD COMMAND WIH {} ARGUMENTS'.format(args)
 
 
 class Sub(Command):
+    """To use DEL function use a format: del [name] [phone]"""
+    
+    
     def command(self, *args):
+        if Command.suggetion and self.suggetion:
+            suggetion.message.append('TIP: del [name] -> to delete entire contact')
+            suggetion.message.append('TIP: del [name] [phone] -> to delete phone\'s number from contact')
+            self.suggetion = False
+        name, phone, *_ =  args
+        if not name:
+            return self.__doc__
         return 'THIS IS A DEL COMMAND WIH {} ARGUMENTS'.format(args)
 
 
@@ -57,7 +67,7 @@ def set_tips(*args):
     is_enable, *_ = args
     if not is_enable or (is_enable != 'off' and is_enable != 'on'):
         return set_tips.__doc__
-    Command.set_suggetion = is_enable
+    Command.suggetion = is_enable
     return 'TIPS is {}'.format(is_enable)
 
 
